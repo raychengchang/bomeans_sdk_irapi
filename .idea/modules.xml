@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bomeans_sdk_irapi.iml" filepath="$PROJECT_DIR$/bomeans_sdk_irapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/irapi/irapi.iml" filepath="$PROJECT_DIR$/irapi/irapi.iml" />
+    </modules>
+  </component>
+</project>
