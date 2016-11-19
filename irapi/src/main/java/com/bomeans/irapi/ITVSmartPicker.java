@@ -31,5 +31,10 @@ public interface ITVSmartPicker {
 	 * @return picker results (could be multiple results), or null if the test is not yet completed.
 	 */
 	SmartPickerResult[] getPickerResult();
+
+	/**
+	 * To restart the smart picker
+	 */
+	void reset();
 	
 }

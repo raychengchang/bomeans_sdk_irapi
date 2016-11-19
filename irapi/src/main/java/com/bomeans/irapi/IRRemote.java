@@ -37,6 +37,16 @@ public class IRRemote implements IIRRemote {
 	}
 
 	@Override
+	public String[] getModels() {
+
+		if (null != mIrRemote) {
+			return new String[] {mIrRemote.getModuleName()};
+		}
+
+        return new String[] {};
+	}
+
+	@Override
 	public String[] getKeyList() {
 		if (null != mIrRemote) {
 			return mIrRemote.getAllKeys();
@@ -121,7 +131,11 @@ public class IRRemote implements IIRRemote {
 	public ACGUIFeatures acGetGuiFeatures() {
 		if (null != mIrRemote) {
 			BIRGUIFeature guiFeatures = mIrRemote.getGuiFeature();
-			return new ACGUIFeatures(guiFeatures);
+            if (null == guiFeatures) {
+                return null;
+            } else {
+                return new ACGUIFeatures(guiFeatures);
+            }
 		} else {
 			return null;
 		}

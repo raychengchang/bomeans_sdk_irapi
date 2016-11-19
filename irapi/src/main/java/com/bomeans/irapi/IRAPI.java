@@ -27,7 +27,7 @@ import java.util.List;
  *
  */
 public class IRAPI {
-	private static final String TAG = "sss";
+	private static final String TAG = "IRAPI";
 
 	public static void init(String apiKey, Context appContext) {
 		IRKit.setup(apiKey, appContext);
@@ -37,6 +37,11 @@ public class IRAPI {
 		IRKit.setUseChineseServer(set);
 	}
 
+    /**
+     * setup the user-defined IR Blaster (which should implements IIRBlaster interface and
+     * passing into the SDK via this API call.
+     * @param irBlaster user-defined IR Blaster instance
+     */
 	public static void setCustomerIrBlaster(IIRBlaster irBlaster) {
 		IRKit.setIRHW(new IrBlasterWrapper(irBlaster));
 	}
@@ -344,8 +349,26 @@ public class IRAPI {
 		return null != task;
 	}
 
-	/**
-	 *
+    /**
+     * if the passing modelId as null in the createRemote(), the returned remote
+     * controller instance will be the "universal" remote controller. Otherwise,
+     * the returned instance is a single remote controller corresponding to the
+     * specified remote id.
+     *
+     * [Note] The so-called universal remote controller is a remote controller instance
+     * which carries several most popular remote controllers of the specified brand. Those
+     * underlying remote controllers are combined into one. So when a key of this remote
+     * controllers is pressed, the IR signals corresponding to the underlying remote
+     * controllers will be sent one by one. This gives the best guess of the correct remote
+     * controllers of the specified brand.
+     * The universal remote controller can still miss the correct IR signal since only a
+     * limited number of controllers are picked and combined. In this case, you still need to
+     * allow user to have a way to select the right one by methods such as "smart picker".
+     *
+     * [Note] The remote id is actually an unique id used in the Cloud database to identify
+     * each individual remote controller. If you are looking for the "model name" of the target
+     * appliances, look
+     *
 	 * @param typeId
 	 * @param brandId
 	 * @param remoteId

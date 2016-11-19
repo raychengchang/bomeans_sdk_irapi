@@ -19,6 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CreateTVRemoteActivity" />
+        <activity android:name=".CreateTVUniversalRemoteActivity" />
+        <activity android:name=".CreateTVSmartPickerActivity" />
+        <activity android:name=".CreateACRemoteActivity" />
+        <activity android:name=".CreateACUniversalRemoteActivity" />
+        <activity android:name=".CreateACPickerActivity"></activity>
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ public class TVSmartPicker implements ITVSmartPicker {
 		mCurrentKey = null;
 		mCompleted = false;
 	}
+
 	@Override
 	public String getPickerKey() {
 		
@@ -102,5 +103,15 @@ public class TVSmartPicker implements ITVSmartPicker {
 			return null;
 		}
 	}
+
+    @Override
+    public void reset() {
+        mCurrentKey = null;
+        mCompleted = false;
+        mResults = null;
+        if (null != mTvPicker) {
+            mTvPicker.begin();
+        }
+    }
 
 }

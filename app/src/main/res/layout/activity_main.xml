@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,10 +8,49 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.bomeans.testirapi.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_basic_info"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+        android:text="Basic Info"/>
+
+    <Button
+        android:id="@+id/button_create_tv_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create TV Remote"/>
+
+    <Button
+        android:id="@+id/button_create_tv_univ_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create TV Universal Remote"/>
+
+    <Button
+        android:id="@+id/button_run_tv_smart_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create TV Smart Picker"/>
+
+    <Button
+        android:id="@+id/button_create_ac_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create AC Remote"/>
+
+    <Button
+        android:id="@+id/button_create_ac_universal_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create AC Universal Remote"/>
+
+    <Button
+        android:id="@+id/button_run_ac_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run AC Picker"/>
+
+</LinearLayout>

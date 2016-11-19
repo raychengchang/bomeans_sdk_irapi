@@ -1,6 +1,9 @@
 package com.bomeans.irapi;
 
 
+/**
+ * All the remote controller manipulation is here.
+ */
 
 public interface IIRRemote {
 	
@@ -15,6 +18,12 @@ public interface IIRRemote {
 	 * @return
 	 */
 	String getRemoteId();
+
+    /**
+     * Get the appliance model IDs that can be controlled by this remote controller.
+     * @return
+     */
+    String[] getModels();
 
 	/**
 	 * Get all the key IDs contains in this remote
