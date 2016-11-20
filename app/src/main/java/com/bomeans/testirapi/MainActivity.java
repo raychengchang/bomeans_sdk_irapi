@@ -19,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String DBG_TAG = "IRAPI";
 
-    // apply a API KEY from Bomeans to run this demo
-    private String BOMEANS_SDK_API_KEY = "";
-
     private List<TypeInfo> mTypeList = new ArrayList<>();
     private Map<TypeInfo, List<BrandInfo>> mBrands = new HashMap<>();
 
@@ -29,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // initialize SDK
-        initializeSDK();
 
         // button: basic info, including supported types, brands, etc
         Button btnScanBasicInfo = (Button) findViewById(R.id.button_basic_info);
@@ -119,19 +113,26 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
-    }
 
-    private void initializeSDK() {
+        // button: learn and send
+        Button btnLearnAndSend = (Button) findViewById(R.id.button_learn_n_send);
+        btnLearnAndSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LearnAndSendActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
 
-        // initialize the SDK
-        IRAPI.init(BOMEANS_SDK_API_KEY, getApplicationContext());
-
-        // select server if needed
-        IRAPI.switchToChineseServer(true);
-
-        // set up the IR Blaster hardware data handling
-        IRAPI.setCustomerIrBlaster(new MyIrBlaster());
-
+        // button: learn and recognize
+        Button btnLearnAndrecognize = (Button) findViewById(R.id.button_learn_n_recognize);
+        btnLearnAndrecognize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LearnAndRecognizeActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
 
     private void getAllTypes() {

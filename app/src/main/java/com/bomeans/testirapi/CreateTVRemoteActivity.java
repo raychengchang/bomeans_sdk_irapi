@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
 import com.bomeans.irapi.ICreateRemoteCallback;
@@ -33,6 +34,7 @@ public class CreateTVRemoteActivity extends AppCompatActivity {
         }
 
         final ScrollView panel = (ScrollView) findViewById(R.id.scroll_view);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // get parameters
         String typeId = getIntent().getStringExtra("type_id");
@@ -40,9 +42,11 @@ public class CreateTVRemoteActivity extends AppCompatActivity {
         String remoteId = getIntent().getStringExtra("remote_id");
 
         if ((null != typeId) && (null != brandId) && (null != remoteId)) {
-            IRAPI.createRemote(typeId, brandId, remoteId, true, new ICreateRemoteCallback() {
+            IRAPI.createRemote(typeId, brandId, remoteId, false, new ICreateRemoteCallback() {
                 @Override
                 public void onRemoteCreated(final IRRemote remote) {
+
+                    progressBar.setVisibility(View.GONE);
 
                     // get all keys in this remote
                     String[] keyList = remote.getKeyList();
@@ -69,6 +73,7 @@ public class CreateTVRemoteActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(int errorCode) {
+                    progressBar.setVisibility(View.GONE);
                     Log.d(DBG_TAG, String.format("ERROR]:%d failed to create remote controller", errorCode));
                 }
             });

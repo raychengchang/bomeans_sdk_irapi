@@ -118,7 +118,7 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
             }
         });
 
-        IRAPI.createSmartPicker(typeId, brandId, true, new ICreateSmartPickerCallback() {
+        IRAPI.createSmartPicker(typeId, brandId, false, new ICreateSmartPickerCallback() {
             @Override
             public void onPickerCreated(TVSmartPicker smartPicker) {
 

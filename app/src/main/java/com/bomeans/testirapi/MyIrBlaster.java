@@ -45,4 +45,19 @@ public class MyIrBlaster implements IIRBlaster {
         // received data bytes as the parameter.
         mDataReceiveCallback = callback;
     }
+
+    public void onDataArrived(byte[] receivedData) {
+
+        // you might need to check the data integrity.
+
+        if (null != mDataReceiveCallback) {
+            mDataReceiveCallback.onDataReceived(receivedData);
+
+            String info = String.format("Received %d bytes:", receivedData.length);
+            for (int i = 0; i < receivedData.length; i++) {
+                info += String.format("%02X,", receivedData[i]);
+            }
+            Log.d(DBG_TAG, info);
+        }
+    }
 }

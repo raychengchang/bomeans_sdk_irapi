@@ -117,7 +117,7 @@ public class CreateACPickerActivity extends AppCompatActivity {
                     rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
 
-                IRAPI.getRemoteList(typeId, brandId, true, new IGetRemoteListCallback() {
+                IRAPI.getRemoteList(typeId, brandId, false, new IGetRemoteListCallback() {
                     @Override
                     public void onDataReceived(List<RemoteInfo> remoteList) {
 

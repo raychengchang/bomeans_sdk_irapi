@@ -95,7 +95,7 @@ public class CreateACRemoteActivity extends AppCompatActivity {
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        IRAPI.createRemote(typeId, brandId, remoteId, true, new ICreateRemoteCallback() {
+        IRAPI.createRemote(typeId, brandId, remoteId, false, new ICreateRemoteCallback() {
             @Override
             public void onRemoteCreated(IRRemote remote) {
 

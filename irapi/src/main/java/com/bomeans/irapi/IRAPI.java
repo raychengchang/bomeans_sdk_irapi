@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bomeans.IRKit.BIRReader;
+import com.bomeans.IRKit.BIRReaderCallback;
 import com.bomeans.IRKit.BIRRemote;
 import com.bomeans.IRKit.BIRTVPicker;
 import com.bomeans.IRKit.BrandItem;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A wrapper for the com.bomeans.IRKit and com.bomeans.wifi2ir functionalities.
+ * A wrapper for the com.bomeans.IRKit and com.bomeans.wifi2ir functionality.
  * 
  * @author Bomeans Design.
  *
@@ -522,6 +524,25 @@ public class IRAPI {
 		return null != task;
 	}
 
+    public static void createIRReader(Boolean getNew, final IIRReaderCallback callback) {
+
+        IRKit.createIRReader(getNew, new BIRReaderCallback() {
+            @Override
+            public void onReaderCreated(BIRReader birReader) {
+                if (null != callback) {
+                    IIRReader irReader = new IRReader(birReader);
+                    callback.onReaderCreated(irReader);
+                }
+            }
+
+            @Override
+            public void onReaderCreateFailed() {
+                if (null != callback) {
+                    callback.onReaderCreateFailed();
+                }
+            }
+        });
+    }
 
 	//----------------------------------------------------------------------------------
 	// WiFi to IR functions

@@ -48,7 +48,7 @@ public class CreateTVUniversalRemoteActivity extends AppCompatActivity {
             // or call IRAPI.createFullUniversalRemote() to create one with all possible keys
             // in the underlying remote controllers.
             // Full universal remote controller is recommended.
-            IRAPI.createFullUniversalRemote(typeId, brandId, true, new ICreateRemoteCallback() {
+            IRAPI.createFullUniversalRemote(typeId, brandId, false, new ICreateRemoteCallback() {
                 @Override
                 public void onRemoteCreated(final IRRemote remote) {
 

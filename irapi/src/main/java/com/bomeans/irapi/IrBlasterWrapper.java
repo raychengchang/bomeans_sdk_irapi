@@ -8,7 +8,7 @@ class IrBlasterWrapper implements BIRIRBlaster {
 
 	private IIRBlaster mIrBlaster;
 	private BIRReceiveDataCallback mReceiveDataCallback;
-	
+
 	public IrBlasterWrapper(IIRBlaster irBlaster) {
 		mIrBlaster = irBlaster;
 	}
@@ -34,10 +34,18 @@ class IrBlasterWrapper implements BIRIRBlaster {
 	}
 
 	@Override
-	public void setReceiveDataCallback(BIRReceiveDataCallback birReceiveDataCallback) {
+	public void setReceiveDataCallback(final BIRReceiveDataCallback birReceiveDataCallback) {
 
-		mReceiveDataCallback = birReceiveDataCallback;
+        mReceiveDataCallback = birReceiveDataCallback;
+
+        if (null != mIrBlaster) {
+            mIrBlaster.setReceiveDataCallback(new IDataReceiveCallback() {
+                @Override
+                public void onDataReceived(byte[] receivedData) {
+                    mReceiveDataCallback.onDataReceived(receivedData);
+				}
+            });
+        }
 	}
-
 }
 

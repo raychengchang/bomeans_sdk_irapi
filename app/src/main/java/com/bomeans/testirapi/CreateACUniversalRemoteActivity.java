@@ -69,7 +69,7 @@ public class CreateACUniversalRemoteActivity extends AppCompatActivity {
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        IRAPI.createSimplifiedUniversalRemote(typeId, brandId, true, new ICreateRemoteCallback() {
+        IRAPI.createSimplifiedUniversalRemote(typeId, brandId, false, new ICreateRemoteCallback() {
             @Override
             public void onRemoteCreated(IRRemote remote) {
                 progressBar.setVisibility(View.GONE);
