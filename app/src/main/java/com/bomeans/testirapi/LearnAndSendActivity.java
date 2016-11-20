@@ -1,5 +1,7 @@
 package com.bomeans.testirapi;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,7 +52,7 @@ public class LearnAndSendActivity extends AppCompatActivity {
         mMyIrBlaster = ((TestIRAPIApp)getApplication()).getMyIrBlaster();
 
         final ProgressBar initProgressBar = (ProgressBar) findViewById(R.id.init_progress_bar);
-        IRAPI.createIRReader(false, new IIRReaderCallback() {
+        IRAPI.createIRReader(getNew(), new IIRReaderCallback() {
             @Override
             public void onReaderCreated(IIRReader irReader) {
                 initProgressBar.setVisibility(View.GONE);
@@ -259,5 +261,10 @@ public class LearnAndSendActivity extends AppCompatActivity {
                 this.cancel();
             }
         }
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
     }
 }

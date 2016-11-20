@@ -1,5 +1,8 @@
 package com.bomeans.testirapi;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +18,10 @@ import com.bomeans.irapi.ICreateRemoteCallback;
 import com.bomeans.irapi.IRAPI;
 import com.bomeans.irapi.IRRemote;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,12 +76,18 @@ public class CreateACUniversalRemoteActivity extends AppCompatActivity {
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        IRAPI.createSimplifiedUniversalRemote(typeId, brandId, false, new ICreateRemoteCallback() {
+        IRAPI.createSimplifiedUniversalRemote(typeId, brandId, getNew(), new ICreateRemoteCallback() {
             @Override
             public void onRemoteCreated(IRRemote remote) {
                 progressBar.setVisibility(View.GONE);
 
                 mMyAcRemote = remote;
+
+                // try to restore the ac state
+                byte[] acStateData = getAcState(mMyAcRemote.getBrandId());
+                if (acStateData != null) {
+                    mMyAcRemote.acSetStateData(acStateData);
+                }
 
                 CreateACUniversalRemoteActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -195,6 +208,19 @@ public class CreateACUniversalRemoteActivity extends AppCompatActivity {
         }
 
         updateGUI();
+    }
+
+    @Override
+    protected void onPause() {
+
+        if (null != mMyAcRemote) {
+            byte[] acStateData = mMyAcRemote.acGetStateData();
+            if (null != acStateData) {
+                saveAcState(mMyAcRemote.getBrandId(), acStateData);
+            }
+        }
+
+        super.onPause();
     }
 
     private void updateGUI() {
@@ -333,5 +359,53 @@ public class CreateACUniversalRemoteActivity extends AppCompatActivity {
         }
 
         return newList.toArray(new String[newList.size()]);
+    }
+
+    private Boolean saveAcState(String brandId, byte[] acStateData) {
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("ac_univ_brand_id", brandId);
+        editor.commit();
+
+        try {
+            File file = new File(this.getFilesDir(), "acUnivState");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(acStateData);
+            fos.close();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private byte[] getAcState(String brandId) {
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String savedRemoteId = sharedPref.getString("ac_univ_brand_id", "");
+        if (savedRemoteId != null && savedRemoteId.equalsIgnoreCase(brandId)) {
+
+            File file = new File(this.getFilesDir(), "acUnivState");
+            int size = (int) file.length();
+            byte[] bytes = new byte[size];
+            try {
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+                return bytes;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
     }
 }

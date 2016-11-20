@@ -1,5 +1,7 @@
 package com.bomeans.testirapi;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +50,7 @@ public class CreateTVUniversalRemoteActivity extends AppCompatActivity {
             // or call IRAPI.createFullUniversalRemote() to create one with all possible keys
             // in the underlying remote controllers.
             // Full universal remote controller is recommended.
-            IRAPI.createFullUniversalRemote(typeId, brandId, false, new ICreateRemoteCallback() {
+            IRAPI.createFullUniversalRemote(typeId, brandId, getNew(), new ICreateRemoteCallback() {
                 @Override
                 public void onRemoteCreated(final IRRemote remote) {
 
@@ -96,5 +98,10 @@ public class CreateTVUniversalRemoteActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
     }
 }

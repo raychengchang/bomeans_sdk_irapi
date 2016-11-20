@@ -1,6 +1,8 @@
 package com.bomeans.testirapi;
 
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -117,7 +119,7 @@ public class CreateACPickerActivity extends AppCompatActivity {
                     rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
 
-                IRAPI.getRemoteList(typeId, brandId, false, new IGetRemoteListCallback() {
+                IRAPI.getRemoteList(typeId, brandId, getNew(), new IGetRemoteListCallback() {
                     @Override
                     public void onDataReceived(List<RemoteInfo> remoteList) {
 
@@ -161,7 +163,7 @@ public class CreateACPickerActivity extends AppCompatActivity {
             public void run() {
                 for (int i = 0; i < mRemoteInfoList.size(); i++) {
                     final String remoteId = mRemoteInfoList.get(i).remoteId;
-                    IRAPI.createRemote(typeId, brandId, remoteId, true, new ICreateRemoteCallback() {
+                    IRAPI.createRemote(typeId, brandId, remoteId, getNew(), new ICreateRemoteCallback() {
                         @Override
                         public void onRemoteCreated(IRRemote remote) {
                             mRemoteList.put(remoteId, remote);
@@ -244,5 +246,10 @@ public class CreateACPickerActivity extends AppCompatActivity {
         mTestButton.setEnabled(enabled);
         mYesButton.setEnabled(enabled);
         mNoButton.setEnabled(enabled);
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
     }
 }

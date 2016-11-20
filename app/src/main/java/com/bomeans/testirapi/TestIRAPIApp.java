@@ -29,7 +29,7 @@ public class TestIRAPIApp extends Application {
         IRAPI.init(BOMEANS_SDK_API_KEY, getApplicationContext());
 
         // select server if needed
-        IRAPI.switchToChineseServer(true);
+        IRAPI.switchToChineseServer(false);
 
         // set up the IR Blaster hardware data handling
         IRAPI.setCustomerIrBlaster(mMyIrBlaster);

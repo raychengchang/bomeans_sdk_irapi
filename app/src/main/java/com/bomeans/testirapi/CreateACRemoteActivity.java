@@ -1,5 +1,8 @@
 package com.bomeans.testirapi;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,10 @@ import com.bomeans.irapi.ICreateRemoteCallback;
 import com.bomeans.irapi.IRAPI;
 import com.bomeans.irapi.IRRemote;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +31,8 @@ public class CreateACRemoteActivity extends AppCompatActivity {
     private String DBG_TAG = "IRAPI";
 
     private IRRemote mMyAcRemote = null;
+
+    private String mAcRemoteId;
 
     // GUI: fixed buttons (common for most air-conditioners)
     // These are most common keys for AC remote controllers.
@@ -71,7 +80,7 @@ public class CreateACRemoteActivity extends AppCompatActivity {
         // get parameters
         String typeId = getIntent().getStringExtra("type_id");
         String brandId = getIntent().getStringExtra("brand_id");
-        String remoteId = getIntent().getStringExtra("remote_id");
+        mAcRemoteId = getIntent().getStringExtra("remote_id");
 
         mCurrentPowerText = (TextView) findViewById(R.id.current_power);
         mPowerButton = (Button) findViewById(R.id.button_power);
@@ -95,13 +104,19 @@ public class CreateACRemoteActivity extends AppCompatActivity {
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        IRAPI.createRemote(typeId, brandId, remoteId, false, new ICreateRemoteCallback() {
+        IRAPI.createRemote(typeId, brandId, mAcRemoteId, getNew(), new ICreateRemoteCallback() {
             @Override
             public void onRemoteCreated(IRRemote remote) {
 
                 progressBar.setVisibility(View.GONE);
 
                 mMyAcRemote = remote;
+
+                // try to restore the ac state
+                byte[] acStateData = getAcState(mAcRemoteId);
+                if (acStateData != null) {
+                    mMyAcRemote.acSetStateData(acStateData);
+                }
 
                 CreateACRemoteActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -117,6 +132,18 @@ public class CreateACRemoteActivity extends AppCompatActivity {
                 Log.d(DBG_TAG, String.format("ERROR]:%d failed to create ac remote", errorCode));
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        if (null != mMyAcRemote) {
+            byte[] acStateData = mMyAcRemote.acGetStateData();
+            if (null != acStateData) {
+                saveAcState(mAcRemoteId, acStateData);
+            }
+        }
+
+        super.onPause();
     }
 
     @Override
@@ -494,5 +521,53 @@ public class CreateACRemoteActivity extends AppCompatActivity {
         }
 
         return newList.toArray(new String[newList.size()]);
+    }
+
+    private Boolean saveAcState(String remoteId, byte[] acStateData) {
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("ac_remote_id", remoteId);
+        editor.commit();
+
+        try {
+            File file = new File(this.getFilesDir(), "acSingleState");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(acStateData);
+            fos.close();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private byte[] getAcState(String remoteId) {
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String savedRemoteId = sharedPref.getString("ac_remote_id", "");
+        if (savedRemoteId != null && savedRemoteId.equalsIgnoreCase(remoteId)) {
+
+            File file = new File(this.getFilesDir(), "acSingleState");
+            int size = (int) file.length();
+            byte[] bytes = new byte[size];
+            try {
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+                return bytes;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
     }
 }

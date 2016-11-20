@@ -1,14 +1,21 @@
 package com.bomeans.testirapi;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.bomeans.irapi.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,11 +140,25 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
+
+        // checkbox: get new
+        final CheckBox chkGetNew = (CheckBox) findViewById(R.id.check_get_new);
+        chkGetNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // save to SharedPreferences to share this setting cross Activities
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("get_new", chkGetNew.isChecked());
+                editor.commit();
+            }
+        });
     }
 
     private void getAllTypes() {
         // get all supported types
-        IRAPI.getTypeList("TW", true, new IGetTypeListCallback() {
+        IRAPI.getTypeList("TW", getNew(), new IGetTypeListCallback() {
             @Override
             public void onDataReceived(List<TypeInfo> typeList) {
                 mTypeList = typeList;
@@ -148,19 +169,20 @@ public class MainActivity extends AppCompatActivity {
                 // get all supported brands
                 for (TypeInfo typeInfo : mTypeList) {
                     getAllBrands(typeInfo);
+                    getKeyNameList(typeInfo);
                 }
             }
 
             @Override
             public void onError(int errorCode) {
-                Log.d(DBG_TAG, "[ERROR] failed to get type list.");
+                Log.d(DBG_TAG, String.format("[ERROR]:%d failed to get type list.", errorCode));
             }
         });
     }
 
     private void getAllBrands(final TypeInfo typeInfo) {
 
-        IRAPI.getBrandList("TW", typeInfo.typeId, true, true, new IGetBrandListCallback() {
+        IRAPI.getBrandList("TW", typeInfo.typeId, true, getNew(), new IGetBrandListCallback() {
 
             @Override
             public void onDataReceived(List<BrandInfo> brandList) {
@@ -176,22 +198,23 @@ public class MainActivity extends AppCompatActivity {
                 // iterate through all remotes
                 // [warning] don't actually do this, system might determine that
                 // you are abusing the service and disable the provided api key.
+                /*
                 for (BrandInfo brandInfo : brandList) {
                     getRemoteList(typeInfo, brandInfo);
-                }
+                }*/
 
             }
 
             @Override
             public void onError(int errorCode) {
-                Log.d(DBG_TAG, String.format("[ERROR] failed to get brand lists %s", typeInfo.typeNameLocalized));
+                Log.d(DBG_TAG, String.format("[ERROR]:%d failed to get brand lists %s", errorCode, typeInfo.typeNameLocalized));
             }
         });
     }
 
     private void getRemoteList(final TypeInfo typeInfo, final BrandInfo brandInfo) {
 
-        IRAPI.getRemoteList(typeInfo.typeId, brandInfo.brandId, true, new IGetRemoteListCallback() {
+        IRAPI.getRemoteList(typeInfo.typeId, brandInfo.brandId, getNew(), new IGetRemoteListCallback() {
 
             @Override
             public void onDataReceived(List<RemoteInfo> remoteList) {
@@ -205,9 +228,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(int errorCode) {
-                Log.d(DBG_TAG, String.format("ERROR] failed to get remote list"));
+                Log.d(DBG_TAG, String.format("ERROR]:%d failed to get remote list", errorCode));
             }
         });
     }
 
+    private void getKeyNameList(final TypeInfo typeInfo) {
+
+        IRAPI.getAvailableKeyList(typeInfo.typeId, "TW", getNew(), new IGetAvailableKeyListCallback() {
+            @Override
+            public void onDataReceived(List<KeyInfo2> keyList) {
+                for (KeyInfo2 keyInfo : keyList) {
+                    Log.d(DBG_TAG, String.format(
+                            "Key: type=%s, %s (%s)",
+                            typeInfo.typeNameLocalized, keyInfo.keyId, keyInfo.keyNameLocalized));
+                }
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.d(DBG_TAG, String.format("ERROR]:%d failed to get key list", errorCode));
+            }
+        });
+    }
+
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
+    }
 }

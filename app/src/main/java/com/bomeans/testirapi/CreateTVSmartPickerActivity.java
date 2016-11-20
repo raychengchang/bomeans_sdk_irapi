@@ -1,5 +1,7 @@
 package com.bomeans.testirapi;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bomeans.irapi.ICreateRemoteCallback;
 import com.bomeans.irapi.ICreateSmartPickerCallback;
 import com.bomeans.irapi.IRAPI;
 import com.bomeans.irapi.SmartPickerResult;
@@ -118,7 +119,7 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
             }
         });
 
-        IRAPI.createSmartPicker(typeId, brandId, false, new ICreateSmartPickerCallback() {
+        IRAPI.createSmartPicker(typeId, brandId, getNew(), new ICreateSmartPickerCallback() {
             @Override
             public void onPickerCreated(TVSmartPicker smartPicker) {
 
@@ -165,4 +166,8 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
         mNoButton.setEnabled(enabled);
     }
 
+    private Boolean getNew() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean("get_new", false);
+    }
 }
