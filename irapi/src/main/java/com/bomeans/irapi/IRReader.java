@@ -187,9 +187,9 @@ public class IRReader implements IIRReader {
                     List<RemoteMatchResult> myResultList = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         myResultList.add(new RemoteMatchResult(
-                                list.get(i).typeId,
-                                list.get(i).brandId,
-                                list.get(i).modelId
+                                list.get(i).typeID,
+                                list.get(i).brandID,
+                                list.get(i).modelID
                         ));
                     }
 

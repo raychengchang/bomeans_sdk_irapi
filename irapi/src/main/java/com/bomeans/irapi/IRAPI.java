@@ -17,9 +17,11 @@ import com.bomeans.IRKit.KeyName;
 import com.bomeans.IRKit.ModelItem;
 import com.bomeans.IRKit.TypeItem;
 import com.bomeans.IRKit.VoiceSearchResultItem;
-import com.bomeans.wifi2ir.ISmartLinkCallback;
+import com.bomeans.irapi.cir.CIRBlasterWrapper;
+import com.bomeans.irapi.cir.ICIRBlaster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,6 +48,10 @@ public class IRAPI {
      */
 	public static void setCustomerIrBlaster(IIRBlaster irBlaster) {
 		IRKit.setIRHW(new IrBlasterWrapper(irBlaster));
+	}
+
+	public static void setCustomerCirBlaster(ICIRBlaster cirBlaster) {
+		IRKit.setIRHW(new CIRBlasterWrapper(cirBlaster));
 	}
 
 	/**
@@ -492,6 +498,39 @@ public class IRAPI {
 		return null != task;
 	}
 
+    /**
+     * Get the keys for the smart picker of the specified type.
+     * @param typeId
+     * @param getNew
+     * @param callback
+     * @return
+     */
+	public static Boolean getSmartPickerKeys(String typeId, Boolean getNew, final IGetSmartPickerKeysCallback callback) {
+        AsyncTask<?, ?, ?> task = IRKit.webGetSmartPickerKeysByType(typeId, getNew, new IWebAPICallBack() {
+            @Override
+            public void onPreExecute() {}
+
+            @Override
+            public void onPostExecute(Object keyList, int result) {
+
+                if (null != callback) {
+
+                    if (result == ConstValue.BIRNoError) {
+                        String[] _keyList = (String[]) keyList;
+                        callback.onDataReceived(Arrays.asList(_keyList));
+                    } else {
+                        callback.onError(result);
+                    }
+                }
+            }
+
+            @Override
+            public void onProgressUpdate(Integer... integers) {}
+        });
+
+        return null != task;
+    }
+
 	public static Boolean createSmartPicker(String typeId, String brandId, Boolean getNew, final ICreateSmartPickerCallback callback) {
 
 		AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, getNew, new IRemoteCreateCallBack() {
@@ -544,68 +583,6 @@ public class IRAPI {
         });
     }
 
-	//----------------------------------------------------------------------------------
-	// WiFi to IR functions
-	//----------------------------------------------------------------------------------
-	public static void wifi2irSetIP(String IrwifiIP){
-		IRKit.SetWifiToIRIp(IrwifiIP);
-	}
-
-	public static Boolean wifi2irSearchDevice(int timeoutMsec, final ISmartLinkCallback callback) {
-
-		AsyncTask<?, ?, ?> task = IRKit.wifi2IrIsConnect(callback, timeoutMsec);
-
-		return null != task;
-	}
-
-	public static void wifi2irStartSmartConnection(String ssid, String password, byte authMode) {
-		IRKit.startWifiToIRConnectToAP(ssid, password, authMode);
-	}
-
-	public static void wifi2irStopSmartConnection() {
-		IRKit.stopWifiToIRConnect();
-	}
-
-	public static void wifi2irEnableLed(Boolean enable) {
-		IRKit.wifiIRLed_OnOff(enable);
-	}
-
-	public static void wifi2irSetLedColor(float r, float g, float b) {
-		IRKit.wifiIRLed_Color(r, g, b);
-	}
-
-	public static void wifi2irSetLedOnTimer(Boolean enable, int hour, int min, int sec) {
-		IRKit.wifiIRLed_SetOnTimer(enable, hour, min, sec);
-	}
-
-	public static void wifi2irSetLedOffTimer(Boolean enable, int hour, int min, int sec) {
-		IRKit.wifiIRLed_SetOffTimer(enable, hour, min, sec);
-	}
-
-	public static void wifi2irSetWifiOnTimer(Boolean enable, int hour, int min, int sec) {
-		IRKit.wifiIR_SetOnTimer(enable, hour, min, sec);
-	}
-
-	public static void wifi2irSetWifiOffTimer(Boolean enable, int hour, int min, int sec) {
-		IRKit.wifiIR_SetOffTimer(enable, hour, min, sec);
-	}
-
-	public static void wifi2irSetWifiOffNow() {
-		IRKit.wifiIR_TuneOffWifi();
-	}
-
-//----------------------------------------------------------------------------------
-
-	public static void wifi2irSwitch(Boolean enable){
-		IRKit.wifiIRSwitch_OnOff(enable);
-	}
-
-	public static void wifi2irOnTimer(Boolean enable, int hour, int min, int sec){
-		IRKit.wifiIRSwitch_SetOnTimer(enable, hour, min, sec);
-	}
-	public static void wifi2irOffTimer(Boolean enable, int hour, int min, int sec){
-		IRKit.wifiIRSwitch_SetOffTimer(enable,hour,min,sec);
-	}
 }
 
 

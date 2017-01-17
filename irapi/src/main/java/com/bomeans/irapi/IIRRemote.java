@@ -87,6 +87,15 @@ public interface IIRRemote {
 
 
 	/**
+	 * (<b>AC remote only</b>) Set the key option of the specified key.
+	 * This method provides a way to change the internal state of the remote without transmitting the ir signal.
+	 * @param keyId
+	 * @param optionId
+     * @return true if succeeded, false otherwise.
+     */
+	Boolean acSetKeyOption(String keyId, String optionId);
+
+	/**
 	 * (<b>AC remote only</b>) Get the GUI features of the remote.
 	 * GUI features are here for reference in GUI design only.
 	 * @return

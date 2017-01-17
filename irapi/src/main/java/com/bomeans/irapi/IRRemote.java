@@ -76,7 +76,7 @@ public class IRRemote implements IIRRemote {
 	public Boolean transmitIR(String keyId) {
 		if (null != mIrRemote) {
 			int errCode = mIrRemote.transmitIR(keyId, null);
-			return true;
+            return errCode == 0;
 		} else {
 			return false;
 		}
@@ -124,6 +124,16 @@ public class IRRemote implements IIRRemote {
 			return new ACKeyOptions(keyOption);
 		} else {
 			return null;
+		}
+	}
+
+	@Override
+	public Boolean acSetKeyOption(String keyId, String optionId) {
+		if (null != mIrRemote) {
+			int errCode = mIrRemote.setKeyOption(keyId, optionId);
+			return errCode == 0;
+		} else {
+			return false;
 		}
 	}
 
