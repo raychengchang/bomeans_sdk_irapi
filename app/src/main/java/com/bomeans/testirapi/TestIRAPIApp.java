@@ -11,9 +11,10 @@ import com.bomeans.irapi.IRAPI;
 public class TestIRAPIApp extends Application {
 
     // apply a API KEY from Bomeans to run this demo
-    private String BOMEANS_SDK_API_KEY = "";
+    private String BOMEANS_SDK_API_KEY = "04c5212475a7efe56dfd70cec61586d9056947a36"; //"your-api-key-here";
 
-    private MyIrBlaster mMyIrBlaster = new MyIrBlaster();
+    //private MyIrBlaster mMyIrBlaster = new MyIrBlaster();
+    private MyCirBlaster mMyCirBlaster = new MyCirBlaster();
 
     @Override
     public void onCreate() {
@@ -32,12 +33,18 @@ public class TestIRAPIApp extends Application {
         IRAPI.switchToChineseServer(false);
 
         // set up the IR Blaster hardware data handling
-        IRAPI.setCustomerIrBlaster(mMyIrBlaster);
+        //IRAPI.setCustomerIrBlaster(mMyIrBlaster);
+        IRAPI.setCustomerCirBlaster(mMyCirBlaster);
 
     }
 
+    /*
     public MyIrBlaster getMyIrBlaster() {
         return mMyIrBlaster;
+    }*/
+
+    public MyCirBlaster getMyIrBlaster() {
+        return mMyCirBlaster;
     }
 
 }

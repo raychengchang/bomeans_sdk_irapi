@@ -26,5 +26,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
-    compile project(':irapi')
+    //compile(project(':irapi')) {
+    //    exclude module: 'irkit'
+    //}
 }

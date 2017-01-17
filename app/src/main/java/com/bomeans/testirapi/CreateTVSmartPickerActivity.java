@@ -14,9 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bomeans.irapi.ICreateSmartPickerCallback;
+import com.bomeans.irapi.IGetSmartPickerKeysCallback;
 import com.bomeans.irapi.IRAPI;
 import com.bomeans.irapi.SmartPickerResult;
 import com.bomeans.irapi.TVSmartPicker;
+
+import java.util.List;
 
 public class CreateTVSmartPickerActivity extends AppCompatActivity {
 
@@ -44,8 +47,8 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
         }
 
         // get parameters
-        String typeId = getIntent().getStringExtra("type_id");
-        String brandId = getIntent().getStringExtra("brand_id");
+        final String typeId = getIntent().getStringExtra("type_id");
+        final String brandId = getIntent().getStringExtra("brand_id");
 
         mYesButton = (Button) findViewById(R.id.button_yes);
         mNoButton = (Button) findViewById(R.id.button_no);
@@ -119,19 +122,42 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
             }
         });
 
-        IRAPI.createSmartPicker(typeId, brandId, getNew(), new ICreateSmartPickerCallback() {
+        /**
+         * Get the keys for the smart picker.
+         * This is just a helper API in case you need to know the keys for the smart picker
+         * before you actually download the smart picker. In most case, you can just get the
+         * key sequence in the smart picker.
+         * Note: Not all keys are necessary to be presented in the smart picker for a specific type and
+         * brand. A smart picker uses only keys needed for helping the picking process.
+         */
+        IRAPI.getSmartPickerKeys(typeId, getNew(), new IGetSmartPickerKeysCallback() {
             @Override
-            public void onPickerCreated(TVSmartPicker smartPicker) {
+            public void onDataReceived(List<String> list) {
+                Log.d(DBG_TAG, "Key IDs for smart picker:");
+                for (String keyId : list) {
+                    Log.d(DBG_TAG, keyId);
+                }
 
-                progressBar.setVisibility(View.GONE);
+                IRAPI.createSmartPicker(typeId, brandId, getNew(), new ICreateSmartPickerCallback() {
+                    @Override
+                    public void onPickerCreated(TVSmartPicker smartPicker) {
 
-                mSmartPicker = smartPicker;
-                startSmartPicker();
+                        progressBar.setVisibility(View.GONE);
+
+                        mSmartPicker = smartPicker;
+                        startSmartPicker();
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.d(DBG_TAG, String.format("ERROR]:%d failed to create smart picker", errorCode));
+                    }
+                });
             }
 
             @Override
             public void onError(int errorCode) {
-                progressBar.setVisibility(View.GONE);
                 Log.d(DBG_TAG, String.format("ERROR]:%d failed to create smart picker", errorCode));
             }
         });

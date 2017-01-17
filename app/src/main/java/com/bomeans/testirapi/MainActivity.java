@@ -1,8 +1,5 @@
 package com.bomeans.testirapi;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,7 +12,6 @@ import android.widget.CheckBox;
 
 import com.bomeans.irapi.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateTVUniversalRemoteActivity.class);
                 intent.putExtra("type_id", "1");
-                intent.putExtra("brand_id", "12");
+                intent.putExtra("brand_id", "13");
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -162,14 +158,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataReceived(List<TypeInfo> typeList) {
                 mTypeList = typeList;
+                /*
                 for (TypeInfo type : typeList) {
                     Log.d(DBG_TAG, String.format("Type: id=%s, name_en=%s, name=%s", type.typeId, type.typeNameEN, type.typeNameLocalized));
-                }
+                }*/
 
                 // get all supported brands
                 for (TypeInfo typeInfo : mTypeList) {
                     getAllBrands(typeInfo);
-                    getKeyNameList(typeInfo);
+                    //getKeyNameList(typeInfo);
                 }
             }
 
@@ -189,19 +186,19 @@ public class MainActivity extends AppCompatActivity {
 
                 mBrands.put(typeInfo, brandList);
 
+                /*
                 for (BrandInfo brand : brandList) {
                     Log.d(DBG_TAG, String.format("Brand: type=%s, id=%s, name_en=%s, name=%s",
                             typeInfo.typeId,
                             brand.brandId, brand.brandNameEN, brand.brandNameLocalized));
-                }
+                }*/
 
                 // iterate through all remotes
                 // [warning] don't actually do this, system might determine that
                 // you are abusing the service and disable the provided api key.
-                /*
                 for (BrandInfo brandInfo : brandList) {
                     getRemoteList(typeInfo, brandInfo);
-                }*/
+                }
 
             }
 
@@ -219,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataReceived(List<RemoteInfo> remoteList) {
 
+                Log.d(DBG_TAG, String.format("%s: %s: %d",
+                        typeInfo.typeNameEN, brandInfo.brandNameEN, remoteList.size()));
                 for (RemoteInfo remoteInfo : remoteList) {
                     Log.d(DBG_TAG, String.format("Remote: type=%s(%s), brand=%s(%s), id=%s : %s",
                             typeInfo.typeId, typeInfo.typeNameLocalized, brandInfo.brandId, brandInfo.brandNameLocalized,

@@ -26,6 +26,63 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * For the AC Remote, keep track of the following key IDs and option IDs for the GUI mapping.
+ *
+ * IR_ACKEY_POWER
+ *      - IR_ACOPT_POWER_ON
+ *      - IR_ACOPT_POWER_OFF
+ *
+ * IR_ACKEY_MODE
+ *      - IR_ACOPT_MODE_AUTO
+ *      - IR_ACOPT_MODE_COOL
+ *      - IR_ACOPT_MODE_WARM
+ *      - IR_ACOPT_MODE_DRY
+ *      - IR_ACOPT_MODE_FAN
+ *
+ * IR_ACKEY_AIRSWING_UD
+ *      - IR_ACOPT_AIRSWING_UD_A    (Auto)
+ *      - IR_ACOPT_AIRSWING_UD_OFF
+ *      - IR_ACOPT_AIRSWING_UD_1    (1..8 is the flap position)
+ *      - IR_ACOPT_AIRSWING_UD_2
+ *      - IR_ACOPT_AIRSWING_UD_3
+ *      - IR_ACOPT_AIRSWING_UD_4
+ *      - IR_ACOPT_AIRSWING_UD_5
+ *      - IR_ACOPT_AIRSWING_UD_6
+ *      - IR_ACOPT_AIRSWING_UD_7
+ *      - IR_ACOPT_AIRSWING_UD_8
+ *
+ * IR_ACKEY_AIRSWING_LR
+ *      - IR_ACOPT_AIRSWING_LR_A    (Auto)
+ *      - IR_ACOPT_AIRSWING_LR_OFF
+ *      - IR_ACOPT_AIRSWING_LR_1    (1..8 is the flap position)
+ *      - IR_ACOPT_AIRSWING_LR_2
+ *      - IR_ACOPT_AIRSWING_LR_3
+ *      - IR_ACOPT_AIRSWING_LR_4
+ *      - IR_ACOPT_AIRSWING_LR_5
+ *      - IR_ACOPT_AIRSWING_LR_6
+ *      - IR_ACOPT_AIRSWING_LR_7
+ *      - IR_ACOPT_AIRSWING_LR_8
+ *
+ * IR_ACKEY_FANSPEED
+ *      - IR_ACOPT_FANSPEED_A   (Auto)
+ *      - IR_ACOPT_FANSPEED_L   (Low)
+ *      - IR_ACOPT_FANSPEED_M   (Middle)
+ *      - IR_ACOPT_FANSPEED_H   (High)
+ *      - IR_ACOPT_FANSPEED_H1  (High 1)
+ *      - IR_ACOPT_FANSPEED_H2  (High 2)
+ *      - IR_ACOPT_FANSPEED_H3  (High 3)
+ *
+ *  IR_ACKEY_AIRSWAP
+ *      - IR_ACOPT_AIRSWAP_ON
+ *      - IR_ACOPT_AIRSWAP_OFF
+ *      - IR_ACOPT_AIRSWAP_1
+ *      - IR_ACOPT_AIRSWAP_2
+ *      - IR_ACOPT_AIRSWAP_3
+ *
+ *  All other AC keys can be found by calling IRAPI.getAvailableKeyList() with
+ *  AC type as the inpit parameter
+ */
 public class CreateACRemoteActivity extends AppCompatActivity {
 
     private String DBG_TAG = "IRAPI";
@@ -116,6 +173,11 @@ public class CreateACRemoteActivity extends AppCompatActivity {
                 byte[] acStateData = getAcState(mAcRemoteId);
                 if (acStateData != null) {
                     mMyAcRemote.acSetStateData(acStateData);
+                } else {
+                    // maybe we can set the initial state of the remote if no previous saved state?
+                    // to do so, call mMyAcRemote.acSetKeyOption()
+                    mMyAcRemote.acSetKeyOption("IR_ACKEY_MODE", "IR_ACOPT_MODE_COOL");
+                    mMyAcRemote.acSetKeyOption("IR_ACKEY_TEMP", "IR_ACSTATE_TEMP_25");
                 }
 
                 CreateACRemoteActivity.this.runOnUiThread(new Runnable() {

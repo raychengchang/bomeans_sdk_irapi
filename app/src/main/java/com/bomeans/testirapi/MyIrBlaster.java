@@ -2,7 +2,6 @@ package com.bomeans.testirapi;
 
 import android.util.Log;
 
-import com.bomeans.IRKit.ConstValue;
 import com.bomeans.irapi.IDataReceiveCallback;
 import com.bomeans.irapi.IIRBlaster;
 
@@ -35,7 +34,7 @@ public class MyIrBlaster implements IIRBlaster {
         }
         Log.d(DBG_TAG, info);
 
-        return ConstValue.BIROK;
+        return 0;   // no error
     }
 
     @Override

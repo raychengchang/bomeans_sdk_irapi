@@ -24,7 +24,8 @@ public class LearnAndSendActivity extends AppCompatActivity {
     private String DBG_TAG = "IRAPI";
 
     private IIRReader mIrReader;
-    private MyIrBlaster mMyIrBlaster;
+    //private MyIrBlaster mMyIrBlaster;
+    private MyCirBlaster mMyIrBlaster;
 
     private Button mSendButton;
     private Button mLearnButton;
@@ -83,10 +84,14 @@ public class LearnAndSendActivity extends AppCompatActivity {
                 mSendButton.setEnabled(false);
 
                 // simulate the receiving of ir learning data
+                /*
                 mMyIrBlaster.onDataArrived(new byte[]{
                         //(byte)0xFF,(byte)0x61,(byte)0x00,(byte)0x02,(byte)0x00,(byte)0x91,(byte)0x93,(byte)0xF0
                         (byte) 0xFF, (byte) 0x61, (byte) 0x00, (byte) 0x6C, (byte) 0x00, (byte) 0x92, (byte) 0xA6, (byte) 0x93, (byte) 0x56, (byte) 0x06, (byte) 0x26, (byte) 0x46, (byte) 0x4C, (byte) 0x23, (byte) 0x1C, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xB8, (byte) 0x11, (byte) 0x4C, (byte) 0x02, (byte) 0xB8, (byte) 0x06, (byte) 0x6E, (byte) 0x91, (byte) 0xF4, (byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x21, (byte) 0x31, (byte) 0x40, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x24, (byte) 0x00, (byte) 0x10, (byte) 0x22, (byte) 0x22, (byte) 0x12, (byte) 0x12, (byte) 0x22, (byte) 0x22, (byte) 0x12, (byte) 0x22, (byte) 0x12, (byte) 0x22, (byte) 0x22, (byte) 0x11, (byte) 0x21, (byte) 0x11, (byte) 0x11, (byte) 0x32, (byte) 0x34, (byte) 0x18, (byte) 0xF0
-                });
+                });*/
+                mMyIrBlaster.onLearningDataReceived(37917,
+                        new int[] { 3370,1680,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,1260,420,1260,420,1260,420,1260,420,420,420,420,420,1260,420,420,420,1260,420,1260,420,1260,420,1260,420,420,420,1260,420,67450,3370,1680,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,420,1260,420,420,420,1260,420,1260,420,1260,420,1260,420,420,420,420,420,1260,420,420,420,1260,420,1260,420,1260,420,1260,420,420,420,1260,420,67450});
+
             }
         });
 
