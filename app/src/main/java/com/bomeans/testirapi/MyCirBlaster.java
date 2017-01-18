@@ -32,7 +32,7 @@ public class MyCirBlaster implements ICIRBlaster {
     public int sendMultipleIR(int[] frequencyArray, ArrayList<int[]> patternsArray) {
         for (int irIdx = 0; irIdx < frequencyArray.length; irIdx++) {
             String info = String.format("Transmit IR: %dHz,", frequencyArray[irIdx]);
-            for (int i = 0; i < patternsArray.get(i).length; i++) {
+            for (int i = 0; i < patternsArray.get(irIdx).length; i++) {
                 info += String.format("%d,", patternsArray.get(irIdx)[i]);
             }
             Log.d(DBG_TAG, info);

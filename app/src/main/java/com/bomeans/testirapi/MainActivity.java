@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateACUniversalRemoteActivity.class);
                 intent.putExtra("type_id", "2");
-                intent.putExtra("brand_id", "1449");
+                intent.putExtra("brand_id", "1450");
                 MainActivity.this.startActivity(intent);
             }
         });
