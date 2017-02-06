@@ -214,7 +214,7 @@ public class IRAPI {
 	 */
 	public static Boolean getRemoteList(String typeId, String brandId, Boolean getNew, final IGetRemoteListCallback callback) {
 
-		AsyncTask<?, ?, ?> task = IRKit.webGetRemoteModelList(typeId, brandId, new IWebAPICallBack() {
+		AsyncTask<?, ?, ?> task = IRKit.webGetRemoteModelList(typeId, brandId, getNew, new IWebAPICallBack() {
 
 			@Override
 			public void onPreExecute() {
