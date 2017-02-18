@@ -1,8 +1,11 @@
 package com.bomeans.testirapi;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateACRemoteActivity.class);
                 intent.putExtra("type_id", "2");
-                intent.putExtra("brand_id", "1449");
-                intent.putExtra("remote_id", "DAIKIN-423A13");
+                intent.putExtra("brand_id", "1454");
+                intent.putExtra("remote_id", "TECO-AC-016");
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateACUniversalRemoteActivity.class);
                 intent.putExtra("type_id", "2");
-                intent.putExtra("brand_id", "1450");
+                intent.putExtra("brand_id", "1496");
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -150,6 +153,29 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
             }
         });
+
+        // check API Key
+        if (TestIRAPIApp.BOMEANS_SDK_API_KEY == null || TestIRAPIApp.BOMEANS_SDK_API_KEY.isEmpty()) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Invalid API Key!")
+                    .setMessage("No valid API key is assigned!\n\nTo apply an API key:\nhttp://www.bomeans.com/Mainpage/Apply/apikey")
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton("Apply Now", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.bomeans.com/Mainpage/Apply/apikey"));
+                            startActivity(browserIntent);
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setCancelable(false)
+                    .show();
+        }
     }
 
     private void getAllTypes() {
@@ -186,20 +212,21 @@ public class MainActivity extends AppCompatActivity {
 
                 mBrands.put(typeInfo, brandList);
 
-                /*
+
                 for (BrandInfo brand : brandList) {
                     Log.d(DBG_TAG, String.format("Brand: type=%s, id=%s, name_en=%s, name=%s",
                             typeInfo.typeId,
                             brand.brandId, brand.brandNameEN, brand.brandNameLocalized));
-                }*/
+                }
 
+                /*
                 // iterate through all remotes
                 // [warning] don't actually do this, system might determine that
                 // you are abusing the service and disable the provided api key.
                 for (BrandInfo brandInfo : brandList) {
                     getRemoteList(typeInfo, brandInfo);
                 }
-
+                */
             }
 
             @Override
