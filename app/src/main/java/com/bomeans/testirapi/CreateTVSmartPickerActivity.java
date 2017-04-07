@@ -138,7 +138,10 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
                     Log.d(DBG_TAG, keyId);
                 }
 
-                IRAPI.createSmartPicker(typeId, brandId, getNew(), new ICreateSmartPickerCallback() {
+                IRAPI.createSmartPicker(typeId, brandId,
+                        new String[] {"IR_KEY_POWER_TOGGLE", "IR_KEY_VOLUME_UP", "IR_KEY_VOLUME_DOWN"},
+                        getNew(),
+                        new ICreateSmartPickerCallback() {
                     @Override
                     public void onPickerCreated(TVSmartPicker smartPicker) {
 

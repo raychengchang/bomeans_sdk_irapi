@@ -17,6 +17,15 @@
         android:layout_alignParentTop="true"
         android:text="Re-start"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_restart"
+        android:layout_marginTop="50dp"
+        style="?android:attr/progressBarStyleLarge"/>
+
     <Button
         android:id="@+id/button_key"
         android:layout_width="match_parent"
