@@ -533,7 +533,12 @@ public class IRAPI {
 
 	public static Boolean createSmartPicker(String typeId, String brandId, Boolean getNew, final ICreateSmartPickerCallback callback) {
 
-		AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, getNew, new IRemoteCreateCallBack() {
+        return createSmartPicker(typeId, brandId, null, getNew, callback);
+	}
+
+	public static Boolean createSmartPicker(String typeId, String brandId, String[] keyIdList, Boolean getNew, final ICreateSmartPickerCallback callback) {
+
+		AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, keyIdList, getNew, new IRemoteCreateCallBack() {
 
 			@Override
 			public void onCreateResult(Object remote, int result) {
