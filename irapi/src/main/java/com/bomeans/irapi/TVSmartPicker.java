@@ -53,9 +53,9 @@ public class TVSmartPicker implements ITVSmartPicker {
 	}
 
 	@Override
-	public void setPickerResult(Boolean isWorking) {
+	public int setPickerResult(Boolean isWorking) {
 		
-		 int result = mTvPicker.keyResult(isWorking);
+		int result = mTvPicker.keyResult(isWorking);
 		RemoteUID[] remoteUidArray;
 		
 	 	 switch (result) {
@@ -87,7 +87,7 @@ public class TVSmartPicker implements ITVSmartPicker {
 				mResults[i] = new SmartPickerResult(remoteUidArray[i]);
 			}
 		}
-		
+		return result;
 	}
 
 	@Override
@@ -114,4 +114,13 @@ public class TVSmartPicker implements ITVSmartPicker {
         }
     }
 
+	@Override
+	public void setNum(int num) {
+
+	}
+
+	@Override
+	public RemoteInfo getModel() {
+		return null;
+	}
 }

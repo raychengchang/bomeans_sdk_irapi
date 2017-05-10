@@ -40,7 +40,7 @@ public class IRRemote implements IIRRemote {
 	public String[] getModels() {
 
 		if (null != mIrRemote) {
-			return new String[] {mIrRemote.getModuleName()};
+            return mIrRemote.getMachineModels();
 		}
 
         return new String[] {};

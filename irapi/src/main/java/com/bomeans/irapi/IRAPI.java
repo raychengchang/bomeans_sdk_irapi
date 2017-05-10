@@ -11,6 +11,7 @@ import com.bomeans.IRKit.BIRTVPicker;
 import com.bomeans.IRKit.BrandItem;
 import com.bomeans.IRKit.ConstValue;
 import com.bomeans.IRKit.IRKit;
+import com.bomeans.IRKit.IRemoteACCreateCallBack;
 import com.bomeans.IRKit.IRemoteCreateCallBack;
 import com.bomeans.IRKit.IWebAPICallBack;
 import com.bomeans.IRKit.KeyName;
@@ -268,7 +269,7 @@ public class IRAPI {
 	 */
 	public static Boolean getAvailableKeyList(String typeId, String locationCode, Boolean getNew, final IGetAvailableKeyListCallback callback) {
 
-		AsyncTask<?, ?, ?> task = IRKit.webGetKeyName(typeId, locationCode, getNew, new IWebAPICallBack() {
+		AsyncTask<?, ?, ?> task = IRKit.webGetKeyName("", locationCode, getNew, new IWebAPICallBack() {
 
 			@Override
 			public void onPreExecute() {
@@ -533,41 +534,104 @@ public class IRAPI {
 
 	public static Boolean createSmartPicker(String typeId, String brandId, Boolean getNew, final ICreateSmartPickerCallback callback) {
 
-        return createSmartPicker(typeId, brandId, null, getNew, callback);
-	}
+		if (typeId.equals("2")) {
 
-	public static Boolean createSmartPicker(String typeId, String brandId, String[] keyIdList, Boolean getNew, final ICreateSmartPickerCallback callback) {
-
-		AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, keyIdList, getNew, new IRemoteCreateCallBack() {
-
-			@Override
-			public void onCreateResult(Object remote, int result) {
-				if (null != callback) {
-
-					if (result == ConstValue.BIRNoError) {
-						TVSmartPicker tvSmartPicker = new TVSmartPicker((BIRTVPicker) remote);
-						callback.onPickerCreated(tvSmartPicker);
-					} else {
-						callback.onError(result);
+			AsyncTask<?, ?, ?> task = IRKit.createAcSmartPicker(typeId, brandId, getNew, new IRemoteACCreateCallBack() {
+				@Override
+				public void onDataReceived(com.bomeans.IRKit.ACSmartPicker acSmartPicker) {
+					if (null != callback) {
+						callback.onPickerCreated(new com.bomeans.irapi.ACSmartPicker(acSmartPicker));
 					}
 				}
-			}
 
-			@Override
-			public void onPreCreate() {
-				// TODO Auto-generated method stub
-			}
+				@Override
+				public void onError(int i) {
+					callback.onError(i);
+				}
+			});
 
-			@Override
-			public void onProgressUpdate(Integer... progress) {
-				// TODO Auto-generated method stub
-			}
+			return null != task;
+		} else {
+			AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, getNew, new IRemoteCreateCallBack() {
 
-		});
+				@Override
+				public void onCreateResult(Object remote, int result) {
+					if (null != callback) {
 
-		return null != task;
+						if (result == ConstValue.BIRNoError) {
+							TVSmartPicker tvSmartPicker = new TVSmartPicker((BIRTVPicker) remote);
+							callback.onPickerCreated(tvSmartPicker);
+						} else {
+							callback.onError(result);
+						}
+					}
+				}
+
+				@Override
+				public void onPreCreate() {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onProgressUpdate(Integer... progress) {
+					// TODO Auto-generated method stub
+				}
+
+			});
+
+
+			return null != task;
+		}
 	}
+	public static Boolean createSmartPicker(String typeId, String brandId, Boolean getNew,String[] keyIdSequenceArray, final ICreateSmartPickerCallback callback) {
+		if (typeId.equals("2")) {
 
+			AsyncTask<?, ?, ?> task = IRKit.createAcSmartPicker(typeId, brandId, getNew, new IRemoteACCreateCallBack() {
+				@Override
+				public void onDataReceived(com.bomeans.IRKit.ACSmartPicker acSmartPicker) {
+					if (null != callback) {
+						callback.onPickerCreated(new com.bomeans.irapi.ACSmartPicker(acSmartPicker));
+					}
+				}
+
+				@Override
+				public void onError(int i) {
+					callback.onError(i);
+				}
+			});
+
+			return null != task;
+		} else {
+			AsyncTask<?, ?, ?> task = IRKit.createSmartPicker(typeId, brandId, keyIdSequenceArray, getNew, new IRemoteCreateCallBack() {
+
+				@Override
+				public void onCreateResult(Object remote, int result) {
+					if (null != callback) {
+
+						if (result == ConstValue.BIRNoError) {
+							TVSmartPicker tvSmartPicker = new TVSmartPicker((BIRTVPicker) remote);
+							callback.onPickerCreated(tvSmartPicker);
+						} else {
+							callback.onError(result);
+						}
+					}
+				}
+
+				@Override
+				public void onPreCreate() {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onProgressUpdate(Integer... progress) {
+					// TODO Auto-generated method stub
+				}
+
+			});
+
+			return null != task;
+		}
+	}
     public static void createIRReader(Boolean getNew, final IIRReaderCallback callback) {
 
         IRKit.createIRReader(getNew, new BIRReaderCallback() {
