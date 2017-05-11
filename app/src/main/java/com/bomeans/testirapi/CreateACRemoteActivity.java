@@ -169,6 +169,13 @@ public class CreateACRemoteActivity extends AppCompatActivity {
 
                 mMyAcRemote = remote;
 
+                // machine models
+                String[] machineModels = remote.getModels();
+                Log.d(DBG_TAG, "supported machine models:");
+                for (String model : machineModels) {
+                    Log.d(DBG_TAG, model);
+                }
+
                 // try to restore the ac state
                 byte[] acStateData = getAcState(mAcRemoteId);
                 if (acStateData != null) {

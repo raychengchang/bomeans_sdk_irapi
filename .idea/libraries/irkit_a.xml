@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/app/libs/irkit_a.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$USER_HOME$/OneDrive/BomeansGIT/SDK/Android_ADT_Lib/IRKit_a/src" />
+    </SOURCES>
   </library>
 </component>

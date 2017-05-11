@@ -1,10 +1,10 @@
 package com.bomeans.testirapi;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.bomeans.irapi.ICreateSmartPickerCallback;
 import com.bomeans.irapi.IGetSmartPickerKeysCallback;
 import com.bomeans.irapi.IRAPI;
+import com.bomeans.irapi.ITVSmartPicker;
 import com.bomeans.irapi.SmartPickerResult;
-import com.bomeans.irapi.TVSmartPicker;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
 
     private String DBG_TAG = "IRAPI";
 
-    private TVSmartPicker mSmartPicker;
+    private ITVSmartPicker mSmartPicker;
 
     private Button mYesButton;
     private Button mNoButton;
@@ -138,12 +138,12 @@ public class CreateTVSmartPickerActivity extends AppCompatActivity {
                     Log.d(DBG_TAG, keyId);
                 }
 
-                IRAPI.createSmartPicker(typeId, brandId,
+                IRAPI.createSmartPicker(typeId, brandId,getNew(),
                         new String[] {"IR_KEY_POWER_TOGGLE", "IR_KEY_VOLUME_UP", "IR_KEY_VOLUME_DOWN"},
-                        getNew(),
+
                         new ICreateSmartPickerCallback() {
                     @Override
-                    public void onPickerCreated(TVSmartPicker smartPicker) {
+                    public void onPickerCreated(ITVSmartPicker smartPicker) {
 
                         progressBar.setVisibility(View.GONE);
 

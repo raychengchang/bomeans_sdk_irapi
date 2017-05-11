@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateTVUniversalRemoteActivity.class);
                 intent.putExtra("type_id", "1");
-                intent.putExtra("brand_id", "13");
+                intent.putExtra("brand_id", "1");
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -219,14 +219,14 @@ public class MainActivity extends AppCompatActivity {
                             brand.brandId, brand.brandNameEN, brand.brandNameLocalized));
                 }
 
-                /*
                 // iterate through all remotes
                 // [warning] don't actually do this, system might determine that
                 // you are abusing the service and disable the provided api key.
+                /*
                 for (BrandInfo brandInfo : brandList) {
                     getRemoteList(typeInfo, brandInfo);
-                }
-                */
+                }*/
+
             }
 
             @Override
